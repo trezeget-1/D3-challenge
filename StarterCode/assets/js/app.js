@@ -48,20 +48,20 @@ for (let i=0, n=data.length; i<n; i++){
 
 // console.log(data[0])
 
-  let xBandScale = d3.scaleBand()
-    .domain(d3.extent(data, x => x.poverty))
+  let xLinearScale = d3.scaleLinear()
+    .domain([8,23])
     .range([0, chartWidth])
-    .padding(0.1);
+    // .padding(0.1);
 
 //   // Create a linear scale for the vertical axis.
   let yLinearScale = d3.scaleLinear()
-    .domain([0,27])
+    .domain([2,26])
     .range([chartHeight, 0]);
 
 //   // Create two new functions passing our scales in as arguments
 //   // These will be used to create the chart's axes
-  var bottomAxis = d3.axisBottom(xBandScale);
-  var leftAxis = d3.axisLeft(yLinearScale);
+  var bottomAxis = d3.axisBottom(xLinearScale).ticks(8);
+  var leftAxis = d3.axisLeft(yLinearScale).ticks(12);
 
 //   bottomAxis.ticks(7);
 //   bottomAxis.tickValues([.08,.05,27])
@@ -69,11 +69,11 @@ for (let i=0, n=data.length; i<n; i++){
 //   // Append two SVG group elements to the chartGroup area,
 //   // and create the bottom and left axes inside of them
   chartGroup.append("g")
-    .call(leftAxis.ticks(12));
+    .call(leftAxis);
 
   chartGroup.append("g")
     .attr("transform", `translate(0, ${chartHeight})`)
-    .call(bottomAxis.ticks(7));
+    .call(bottomAxis);
 
     // Add X axis label:
 chartGroup.append("text")
@@ -87,22 +87,54 @@ chartGroup.append("text")
   .attr("transform", "rotate(-90)")
     //   .attr("text-anchor", "end")
       .attr("x", -chartWidth/3)
-      .attr("y", 0-40)
-      
+      .attr("y", 0-40)      
       .text("Lacks Healthcare (%)")
       .attr("text-anchor", "start")
 
-//   // Create one SVG rectangle per piece of Data
-//   // Use the linear and band scales to position each rectangle within the chart
-//   chartGroup.selectAll(".bar")
-//     .data(data)
-//     .enter()
-//     .append("rect")
-//     .attr("class", "bar")
-//     .attr("x", d => xBandScale(d.name))
-//     .attr("y", d => yLinearScale(d.hours))
-//     .attr("width", xBandScale.bandwidth())
-//     .attr("height", d => chartHeight - yLinearScale(d.hours));
+
+  // Add a scale for bubble color PENDIENTE POR USAR
+//   let myColor = d3.scaleOrdinal()
+//     .domain(d3.extent(data, x => x.state))
+//     .range(d3.schemeSet1);
+
+
+//     data.forEach(x => {
+//         let color = d3.interpolateSinebow(x.id*.01)
+//         console.log(color)
+//     });
+
+    // FORMA 2:
+
+    // let myColor = d3.scaleSequential()
+    //             .domain(d3.extent(data, x => x.state))
+    //             .range([0,1]);
+
+
+    // EL BUENAS PARA EL COLOR:
+
+    // data.forEach(x => {
+    //     let color = d3.interpolateSinebow(Math.random())
+    //     color_list.push(color)
+    //     console.log(color)
+    //     });
+    
+
+    
+    chartGroup.append("g")
+        .selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+            .attr("cx", d => xLinearScale(d.poverty))
+            .attr("cy", d => yLinearScale(d.healthcare))
+            .attr("r", 10)
+            .style("fill", "lightcyan")
+            .style("opacity", "0.7")
+            .attr("stroke", "black");
+        
+
+
+
 
 }).catch(function(error) {
   console.log(error);
