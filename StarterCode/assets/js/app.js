@@ -112,27 +112,45 @@ chartGroup.append("text")
 
     // EL BUENAS PARA EL COLOR:
 
-    // data.forEach(x => {
-    //     let color = d3.interpolateSinebow(Math.random())
-    //     color_list.push(color)
-    //     console.log(color)
-    //     });
     
 
-    
+    // function color_picker(){
+    //     // color_list = []
+
+    //     data.forEach(x => {
+    //         let color = d3.interpolateSinebow(Math.random())
+    //         // color_list.push(color)        
+    //         });
+        
+    //     console.log(color_list)
+    // }
+
+
+
     chartGroup.append("g")
-        .selectAll("circle")
+    .selectAll("circle")
+    .data(data)
+    .enter()
+    .append("circle")
+        .attr("cx", d => xLinearScale(d.poverty))
+        .attr("cy", d => yLinearScale(d.healthcare))
+        .attr("r", 11)
+        .style("fill", d =>d3.interpolateSinebow(Math.random()))
+        .style("opacity", "0.7")
+        .attr("stroke", "black");
+        
+    chartGroup.append("g")
+        .selectAll("text")
         .data(data)
         .enter()
-        .append("circle")
-            .attr("cx", d => xLinearScale(d.poverty))
-            .attr("cy", d => yLinearScale(d.healthcare))
-            .attr("r", 10)
-            .style("fill", "lightcyan")
-            .style("opacity", "0.7")
-            .attr("stroke", "black");
-        
-
+        .append("text")
+        .style("text-anchor", "middle")
+        // Add your code below this line
+        .text( d => d.abbr)
+        .attr("x", d => xLinearScale(d.poverty))
+        .attr("y", d => yLinearScale(d.healthcare)+4)
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "11")
 
 
 
