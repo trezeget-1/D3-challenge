@@ -1,5 +1,11 @@
 // @TODO: YOUR CODE HERE!
 
+// DEBUGGER
+
+// console.log(`Index: ${i}, ${data[i].poverty}`)
+// console.log(`Index: ${i}, ${typeof(data[i].healthcare)}`)
+// console.log(data.length);
+
 // Define SVG area dimensions
 let svgWidth = 960;
 let svgHeight = 660;
@@ -26,48 +32,34 @@ let svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
-// Load data from data.csv
+// -- This is where we load the data from data.csv
 d3.csv("data.csv").then(function(data) {
 
     // console.log(data.length);
-
-
-//   // Cast the hours value to a number for each piece of Data
-//   data.forEach(function(d) {
-//     d.hours = +d.hours;
-//   });
 
   // Configure a band scale for the horizontal axis with a padding of 0.1 (10%)
     
 for (let i=0, n=data.length; i<n; i++){    
     data[i].poverty = +data[i].poverty
-    // console.log(`Index: ${i}, ${data[i].poverty}`)
     data[i].healthcare = +data[i].healthcare
-    // console.log(`Index: ${i}, ${typeof(data[i].healthcare)}`)
 }
-
-// console.log(data[0])
 
   let xLinearScale = d3.scaleLinear()
     .domain([8,23])
     .range([0, chartWidth])
-    // .padding(0.1);
 
-//   // Create a linear scale for the vertical axis.
+  // Create a linear scale for the vertical axis.
   let yLinearScale = d3.scaleLinear()
     .domain([2,26])
     .range([chartHeight, 0]);
 
-//   // Create two new functions passing our scales in as arguments
-//   // These will be used to create the chart's axes
+  // Create two new functions passing our scales in as arguments
+  // These will be used to create the chart's axes
   var bottomAxis = d3.axisBottom(xLinearScale).ticks(8);
   var leftAxis = d3.axisLeft(yLinearScale).ticks(12);
 
-//   bottomAxis.ticks(7);
-//   bottomAxis.tickValues([.08,.05,27])
-
-//   // Append two SVG group elements to the chartGroup area,
-//   // and create the bottom and left axes inside of them
+  // Append two SVG group elements to the chartGroup area,
+  // and create the bottom and left axes inside of them
   chartGroup.append("g")
     .call(leftAxis);
 
@@ -77,7 +69,6 @@ for (let i=0, n=data.length; i<n; i++){
 
     // Add X axis label:
 chartGroup.append("text")
-    // .attr("text-anchor", "right")
     .attr("x", chartWidth/2)
     .attr("y", chartHeight+40 )
     .text("In Poverty (%)");
@@ -85,29 +76,10 @@ chartGroup.append("text")
   // Add Y axis label:
   chartGroup.append("text")
   .attr("transform", "rotate(-90)")
-    //   .attr("text-anchor", "end")
       .attr("x", -chartWidth/3)
       .attr("y", 0-40)      
       .text("Lacks Healthcare (%)")
       .attr("text-anchor", "start")
-
-
-  // Add a scale for bubble color PENDIENTE POR USAR
-//   let myColor = d3.scaleOrdinal()
-//     .domain(d3.extent(data, x => x.state))
-//     .range(d3.schemeSet1);
-
-
-//     data.forEach(x => {
-//         let color = d3.interpolateSinebow(x.id*.01)
-//         console.log(color)
-//     });
-
-    // FORMA 2:
-
-    // let myColor = d3.scaleSequential()
-    //             .domain(d3.extent(data, x => x.state))
-    //             .range([0,1]);
 
 
     // EL BUENAS PARA EL COLOR:
@@ -145,7 +117,6 @@ chartGroup.append("text")
         .enter()
         .append("text")
         .style("text-anchor", "middle")
-        // Add your code below this line
         .text( d => d.abbr)
         .attr("x", d => xLinearScale(d.poverty))
         .attr("y", d => yLinearScale(d.healthcare)+4)
