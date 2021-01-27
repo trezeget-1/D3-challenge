@@ -70,6 +70,11 @@ d3.csv("data.csv").then(function(data) {
         return color
     }
 
+
+    // Create group for two x-axis labels
+    var labelsGroup = chartGroup.append("g")
+        // .attr("transform", `translate(${width / 2}, ${height + 20})`);
+
     
     // Add X axis label:
     chartGroup.append("text")
@@ -185,19 +190,74 @@ create_graph()
 
 // ----- FALTA CORREGIR!!--
 
-chartGroup.on("click", function() {
-    let tag_class = d3.select(this).attr("class")
+// chartGroup.on("click", function() {
+//     let tag_class = d3.select(this).attr("class")
 
-    console.log(tag_class)
+//     console.log(tag_class)
 
-    if (tag_class === "x_axis"){
-        xVariableSelected = d3.select(this).attr("value")
-    }else if (tag_class === "y_axis"){
-        yVariableSelected = d3.select(this).attr("value")
-    }
+//     if (tag_class === "x_axis"){
+//         xVariableSelected = d3.select(this).attr("value")
+//     }else if (tag_class === "y_axis"){
+//         yVariableSelected = d3.select(this).attr("value")
+//     }
     
-    create_graph()
-})
+//     create_graph()
+// })
+
+
+
+
+
+// x axis labels event listener
+labelsGroup.selectAll("text")
+.on("click", function() {
+  // get value of selection
+  var value = d3.select(this).attr("value");
+  if (value !== chosenXAxis) {
+
+    // replaces chosenXAxis with value
+    chosenXAxis = value;
+
+    // console.log(chosenXAxis)
+
+    // functions here found above csv import
+    // updates x scale for new data
+    xLinearScale = xScale(hairData, chosenXAxis);
+
+    // updates x axis with transition
+    xAxis = renderAxes(xLinearScale, xAxis);
+
+    // updates circles with new x values
+    circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+
+    // updates tooltips with new info
+    circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+
+    // changes classes to change bold text
+    if (chosenXAxis === "num_albums") {
+      albumsLabel
+        .classed("active", true)
+        .classed("inactive", false);
+      hairLengthLabel
+        .classed("active", false)
+        .classed("inactive", true);
+    }
+    else {
+      albumsLabel
+        .classed("active", false)
+        .classed("inactive", true);
+      hairLengthLabel
+        .classed("active", true)
+        .classed("inactive", false);
+    }
+  }
+});
+
+
+
+
+
+
 
 }).catch(function(error) {
   console.log(error);

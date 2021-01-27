@@ -1,3 +1,19 @@
+// @TODO: YOUR CODE HERE!
+
+// DEBUGGER
+// console.log(`Index: ${i}, ${data[i].poverty}`)
+// console.log(`Index: ${i}, ${typeof(data[i].healthcare)}`)
+
+
+    // ------ DEBUGGER ----
+    // console.log(data);
+    // console.log(Object.keys(data[12]))
+    // console.log(typeof(data[0].smokes))
+
+    // data.forEach(x => {
+    //         console.log(x.smokes)
+    //     });
+
 // Define SVG area dimensions
 let svgWidth = 960;
 let svgHeight = 660;
@@ -23,6 +39,49 @@ let svg = d3.select("#scatter")
 // Append a group to the SVG area and shift ('translate') it to the right and to the bottom
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
+
+
+
+
+// function used for updating circles group with new tooltip
+// function updateToolTip(chosenXAxis, circlesGroup) {
+
+//     // var label;
+  
+//     // if (chosenXAxis === "hair_length") {
+//     //   label = "Hair Length:";
+//     // }
+//     // else {
+//     //   label = "# of Albums:";
+//     // }
+  
+//     var toolTip = d3.tip()
+//       .attr("class", "tooltip")
+//       .offset([80, -60])
+//       .html(function(d) {
+//         return (`${d.state}<br>${label} ${d[chosenXAxis]}`);
+//       });
+  
+//     circlesGroup.call(toolTip);
+  
+//     circlesGroup.on("mouseover", function(data) {
+//       toolTip.show(data);
+//     })
+//       // onmouseout event
+//       .on("mouseout", function(data, index) {
+//         toolTip.hide(data);
+//       });
+  
+//     return circlesGroup;
+//   }
+
+
+
+
+
+
+
+
 
 // -- This is where we load the data from data.csv
 d3.csv("data.csv").then(function(data) {  
@@ -116,6 +175,13 @@ d3.csv("data.csv").then(function(data) {
     let yVariableSelected = "healthcare"
 
 
+//   // updateToolTip function above csv import
+//   var circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
+
+
+
+
+
 function create_graph(xVariableSelected, yVariableSelected){
 
     // Create a linear scale for the horizontal axis.
@@ -146,6 +212,10 @@ function create_graph(xVariableSelected, yVariableSelected){
         .attr("transform", `translate(0, ${chartHeight})`)
         .call(bottomAxis);
 
+
+
+    // Create group for two x-axis labels
+    // var circlesGroup = chartGroup.append("g")
 
 
     // Add SVG Circles:
@@ -301,7 +371,7 @@ labelsGroup.selectAll("text").on("click", function() {
     create_graph(xVariableSelected, yVariableSelected)
 
   });
-
+  
 
 }).catch(function(error) {
   console.log(error);
