@@ -17,7 +17,7 @@ if (!svgArea.empty()) {
     var svgWidth = 0
 
     if (window.innerWidth > 1320){
-        svgWidth = 1320
+        svgWidth = 1320*.80
     }else{
         svgWidth = window.innerWidth*.80;
     }
