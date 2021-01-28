@@ -1,6 +1,29 @@
-// Define SVG area dimensions
-let svgWidth = 960;
-let svgHeight = 660;
+let xVariableSelected = "poverty"
+let yVariableSelected = "healthcare"
+
+function makeResponsive() {
+
+
+// if the SVG area isn't empty when the browser loads,
+// remove it and replace it with a resized version of the chart
+var svgArea = d3.select("body").select("svg");
+
+if (!svgArea.empty()) {
+    svgArea.remove();
+}
+
+    // svg params
+
+    var svgWidth = 0
+
+    if (window.innerWidth > 1320){
+        svgWidth = 1320
+    }else{
+        svgWidth = window.innerWidth*.80;
+    }
+
+    var svgHeight = window.innerHeight/2;
+
 
 // Define the chart's margins as an object
 let chartMargin = {
@@ -11,8 +34,8 @@ let chartMargin = {
 };
 
 // Define dimensions of the chart area
-let chartWidth = svgWidth - chartMargin.left - chartMargin.right;
-let chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
+var chartWidth = svgWidth - chartMargin.left - chartMargin.right;
+var chartHeight = svgHeight - chartMargin.top - chartMargin.bottom;
 
 // Select body, append SVG area to it, and set the dimensions
 let svg = d3.select("#scatter")
@@ -24,7 +47,8 @@ let svg = d3.select("#scatter")
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
-// -- This is where we load the data from data.csv
+
+  // -- This is where we load the data from data.csv
 d3.csv("data.csv").then(function(data) {  
 
     // Configure a band scale for the horizontal axis with a padding of 0.1 (10%)
@@ -86,7 +110,7 @@ d3.csv("data.csv").then(function(data) {
   // Add Y axis label:
   labelsGroup.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("x", -chartWidth/2.7)
+        .attr("x", -chartHeight/2)
         .attr("y", -40)
         .text("Lacks Healthcare (%)")
         .attr("class", "y_axis active")
@@ -95,7 +119,7 @@ d3.csv("data.csv").then(function(data) {
 
     labelsGroup.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("x", -chartWidth/2.7)
+        .attr("x", -chartHeight/2)
         .attr("y", -70)
         .text("Smokes (%)")
         .attr("class", "y_axis inactive")
@@ -104,16 +128,12 @@ d3.csv("data.csv").then(function(data) {
 
     labelsGroup.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("x", -chartWidth/2.7)
+        .attr("x", -chartHeight/2)
         .attr("y", -100)
         .text("Obese (%)")
         .attr("class", "y_axis inactive")
         .attr("id", "obesity")
         .attr("value", "obesity");
-
-
-    let xVariableSelected = "poverty"
-    let yVariableSelected = "healthcare"
 
 
 function create_graph(xVariableSelected, yVariableSelected){
@@ -181,23 +201,10 @@ function create_graph(xVariableSelected, yVariableSelected){
         .attr("font-family", "sans-serif")
         .attr("font-size", "11")
         .append('title')
-        .html(d => `${d.state}<hr>${d3.select("#"+[xVariableSelected]).text()}: ${d[xVariableSelected]} <br>${d3.select("#"+[yVariableSelected]).text()}: ${d[yVariableSelected]}`)
+        .html(d => `${d.state}<hr>
 
-
-  // Three function that change the tooltip when user hover / move / leave a cell
-  
-  d3.selectAll(".circle").on("mouseover", function() {
-      console.log(d3.select(this))
-      d3.select(this)
-        .append("div")
-        .style("opacity", 1)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "2px")
-        .style("border-radius", "5px")
-        .style("padding", "5px")
-      });
+        ${d3.select("#"+[yVariableSelected]).text()}: ${d[yVariableSelected]}
+        ${d3.select("#"+[xVariableSelected]).text()}: ${d[xVariableSelected]}`)
  
 }
 
@@ -306,3 +313,11 @@ labelsGroup.selectAll("text").on("click", function() {
 }).catch(function(error) {
   console.log(error);
 });
+
+};
+
+// Event listener for window resize.
+// When the browser window is resized, makeResponsive() is called.
+d3.select(window).on("resize", makeResponsive);
+
+makeResponsive();
